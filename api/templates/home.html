@@ -1,0 +1,21 @@
+{% extends "main.html" %} {% block content %}
+<div class="row">
+  {% for weather in weathers %}
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Informações de Temperatura</h5>
+        <p class="card-text">Cidade: {{ weather.city }}</p>
+        <p class="card-text">Temperatura: {{weather.temperature}}°C</p>
+        <p class="card-text">
+          Pressão Atmosférica: {{ weather.atmosphericPressure }}
+        </p>
+        <p class="card-text">Umidade: {{ weather.humidity }}</p>
+        <p class="card-text">Condição do Tempo: {{ weather.weather }}</p>
+        <p class="card-text">Data e Hora: {{ weather.date }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock content %}
