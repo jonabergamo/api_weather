@@ -20,3 +20,9 @@ class WeatherView(View):
         # return HttpResponse(weathers)
         
         return render(request, "home.html", {"weathers": weathers})
+    
+
+class AboutView(View):
+    
+    def get(self, request):
+        return render(request, "about.html")

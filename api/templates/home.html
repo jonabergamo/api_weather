@@ -1,18 +1,46 @@
 {% extends "main.html" %} {% block content %}
+<title>Página Inicial</title>
+<style>
+  .weather-card {
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .weather-info {
+    font-size: 16px;
+    color: black;
+  }
+
+  .weather-title {
+    font-size: 20px;
+    color: #007bff;
+    margin-bottom: 10px;
+    font-weight: bold; /* Adicione esta linha para tornar os títulos em negrito */
+  }
+
+  .home-page {
+    color: #007bff;
+  }
+</style>
+
 <div class="row">
   {% for weather in weathers %}
   <div class="col-md-4">
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Informações de Temperatura</h5>
-        <p class="card-text">Cidade: {{ weather.city }}</p>
-        <p class="card-text">Temperatura: {{weather.temperature}}°C</p>
-        <p class="card-text">
-          Pressão Atmosférica: {{ weather.atmosphericPressure }}
+    <div class="weather-card">
+      <h5 class="weather-title">Informações de Temperatura</h5>
+      <div class="weather-info">
+        <p><strong>Cidade:</strong> {{ weather.city }}</p>
+        <p><strong>Temperatura:</strong> {{weather.temperature}}°C</p>
+        <p>
+          <strong>Pressão Atmosférica:</strong> {{ weather.atmosphericPressure}}
         </p>
-        <p class="card-text">Umidade: {{ weather.humidity }}</p>
-        <p class="card-text">Condição do Tempo: {{ weather.weather }}</p>
-        <p class="card-text">Data e Hora: {{ weather.date }}</p>
+        <p><strong>Umidade: </strong> {{ weather.humidity }}</p>
+        <p><strong>Condição do Tempo:</strong> {{ weather.weather }}</p>
+        <p><strong>Data e Hora:</strong> {{ weather.date }}</p>
       </div>
     </div>
   </div>
