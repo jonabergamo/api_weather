@@ -3,7 +3,7 @@ from rest_framework.views import View
 from api.models import WeatherEntity
 from datetime import datetime
 from random import randrange
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .repositories import WeatherRepository
 
 class WeatherView(View):
@@ -18,6 +18,18 @@ class WeatherGenerate(View):
     def get(self, request):
         repository = WeatherRepository(collectionName='weathers')
         # weather = WeatherEntity(temperature=randrange(start=1, step=23), date=datetime.now())
-        weather = {"temperature":25, "date":"hoje"}
+        weather = {
+            "temperature":25,
+            "date":f"{datetime.now()}"
+            }
         repository.insert(weather)
-
+        
+        return redirect('Weather View')
+    
+    
+class WeatherClear(View):
+    
+    def get(self, request):
+        repository = WeatherRepository(collectionName='weathers')
+        repository.dropAll()
+        return redirect('Weather View')
