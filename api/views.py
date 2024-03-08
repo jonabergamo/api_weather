@@ -4,25 +4,20 @@ from api.models import WeatherEntity
 from datetime import datetime
 from random import randrange
 from django.shortcuts import render
+from .repositories import WeatherRepository
 
 class WeatherView(View):
-    
-
     def get(self, request):
-        weathers = []
-        for i in range(10):
-            weathers.append(WeatherEntity(
-            temperature=randrange(25, 35),
-            city='Sorocaba',
-            atmosphericPressure='Razoavel',
-            humidity='Seco', weather='Chuvoso',
-            date=datetime.now))
-        # return HttpResponse(weathers)
-        
-        return render(request, "home.html", {"weathers": weathers})
-    
+        repository = WeatherRepository(collectionName='weathers')
+        weathers = repository.getAll()
+        return render(request, "home.html", {"weathers":weathers})
 
-class AboutView(View):
+
+class WeatherGenerate(View):
     
     def get(self, request):
-        return render(request, "about.html")
+        repository = WeatherRepository(collectionName='weathers')
+        # weather = WeatherEntity(temperature=randrange(start=1, step=23), date=datetime.now())
+        weather = {"temperature":25, "date":"hoje"}
+        repository.insert(weather)
+
