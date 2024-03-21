@@ -1,3 +1,4 @@
+from .repositories import WeatherRepository
 
 
 class WeatherSerializer:

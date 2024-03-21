@@ -82,7 +82,7 @@ class WeatherGenerate(View):
             }
         self.repository.insert(weather)
         
-        return redirect(MAIN_VIEW)
+        return redirect('Weather View')
     
     
 class WeatherClear(View):
@@ -95,4 +95,4 @@ class WeatherClear(View):
     
     def get(self, request):
         self.repository.drop_all()
-        return redirect(MAIN_VIEW)
+        return redirect('Weather View')

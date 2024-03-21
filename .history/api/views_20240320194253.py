@@ -95,4 +95,4 @@ class WeatherClear(View):
     
     def get(self, request):
         self.repository.drop_all()
-        return redirect(MAIN_VIEW)
+        return redirect('Weather View')

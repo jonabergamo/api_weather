@@ -17,22 +17,16 @@ class WeatherRepository:
         
         
     def get_collection(self):
-        conn = self.get_connection()
+        conn = self.getConnection()
         collection = conn[self.collection]
         return collection
     
-    def get_all(self):
-        document = self.get_collection().find({}).sort("date", -1)
+    def getAll(self):
+        document = self.getCollection().find({}).sort("date", -1)
         return document
     
     def insert(self, document):
-        self.get_collection().insert_one(document)
+        self.getCollection().insert_one(document)
         
-    def drop_all(self):
-        self.get_collection().drop()
-        
-    def update(self, query, data):
-        self.get_collection().update_one(query, {"$set": data})
-
-    def delete(self, query):
-        self.get_collection().delete_one(query)
+    def dropAll(self):
+        self.getCollection().drop()

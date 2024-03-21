@@ -55,7 +55,7 @@ class WeatherView(View):
         weather_id = request.POST.get("weather_id")
         query = {"_id": weather_id}
         self.repository.delete(query)
-        return redirect(MAIN_VIEW)
+        return redirect(self.main_view)
 
 
 class WeatherGenerate(View):
@@ -82,7 +82,7 @@ class WeatherGenerate(View):
             }
         self.repository.insert(weather)
         
-        return redirect(MAIN_VIEW)
+        return redirect('Weather View')
     
     
 class WeatherClear(View):
@@ -95,4 +95,4 @@ class WeatherClear(View):
     
     def get(self, request):
         self.repository.drop_all()
-        return redirect(MAIN_VIEW)
+        return redirect('Weather View')

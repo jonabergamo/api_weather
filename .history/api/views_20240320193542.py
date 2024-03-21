@@ -8,54 +8,16 @@ from django.shortcuts import render, redirect
 from .repositories import WeatherRepository
 from .serializers import WeatherSerializer
 
-MAIN_VIEW = 'Weather View'
-
 class WeatherView(View):
     
     serializer_class = WeatherSerializer
 
-        
-    def __init__(self, **kwargs: Any) -> None:
-        self.repository = WeatherRepository(collection_name='weathers')
-
     def get(self, request):
-        weathers = self.repository.get_all()
+        repository = WeatherRepository(collectionName='weathers')
+        weathers = repository.get()
         serializer = self.serializer_class(weathers, many=True)
         serialized_weathers = serializer.serialize()
         return render(request, "home.html", {"weathers":serialized_weathers})
-    
-    def post(self, request):
-        weather_data = {
-            "temperature": request.POST.get("temperature"),
-            "date": request.POST.get("date"),
-            "atmosphericPressure": request.POST.get("atmosphericPressure"),
-            "humidity": request.POST.get("humidity"),
-            "city": request.POST.get("city"),
-            "weather": request.POST.get("weather")
-        }
-        self.repository.insert(weather_data)
-        
-        return redirect(MAIN_VIEW)
-
-    def put(self, request):
-        weather_id = request.POST.get("weather_id")
-        weather_data = {
-            "temperature": request.POST.get("temperature"),
-            "date": request.POST.get("date"),
-            "atmosphericPressure": request.POST.get("atmosphericPressure"),
-            "humidity": request.POST.get("humidity"),
-            "city": request.POST.get("city"),
-            "weather": request.POST.get("weather")
-        }
-        query = {"_id": weather_id}
-        self.repository.update(query, weather_data)
-        return redirect(MAIN_VIEW)
-
-    def delete(self, request):
-        weather_id = request.POST.get("weather_id")
-        query = {"_id": weather_id}
-        self.repository.delete(query)
-        return redirect(MAIN_VIEW)
 
 
 class WeatherGenerate(View):
@@ -65,7 +27,7 @@ class WeatherGenerate(View):
 
     
     def __init__(self, **kwargs: Any) -> None:
-        self.repository = WeatherRepository(collection_name='weathers')
+        self.repository = WeatherRepository(collectionName='weathers')
     
     def get(self, request):
         CIDADES_BRASIL = ["São Paulo", "Rio de Janeiro", "Salvador", "Brasília", "Fortaleza", "Belo Horizonte", "Manaus", "Curitiba", "Recife", "Porto Alegre"];
@@ -82,7 +44,7 @@ class WeatherGenerate(View):
             }
         self.repository.insert(weather)
         
-        return redirect(MAIN_VIEW)
+        return redirect('Weather View')
     
     
 class WeatherClear(View):
@@ -91,8 +53,8 @@ class WeatherClear(View):
     
     
     def __init__(self, **kwargs: Any) -> None:
-        self.repository = WeatherRepository(collection_name='weathers')
+        self.repository = WeatherRepository(collectionName='weathers')
     
     def get(self, request):
         self.repository.drop_all()
-        return redirect(MAIN_VIEW)
+        return redirect('Weather View')

@@ -31,8 +31,4 @@ class WeatherRepository:
     def drop_all(self):
         self.get_collection().drop()
         
-    def update(self, query, data):
-        self.get_collection().update_one(query, {"$set": data})
-
-    def delete(self, query):
-        self.get_collection().delete_one(query)
+        
