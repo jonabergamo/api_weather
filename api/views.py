@@ -12,23 +12,26 @@ MAIN_VIEW = 'Weather View'
 
 class WeatherView(View):
     
-    serializer_class = WeatherSerializer
 
         
     def __init__(self, **kwargs: Any) -> None:
         self.repository = WeatherRepository(collection_name='weathers')
 
     def get(self, request):
-        weathers = self.repository.get_all()
-        serializer = self.serializer_class(weathers, many=True)
-        serialized_weathers = serializer.serialize()
-        return render(request, "home.html", {"weathers":serialized_weathers})
+        repository = WeatherRepository(collection_name='weathers')
+        weathers = list(repository.get_all())
+        serializer = WeatherSerializer(data=weathers, many=True)
+        if (serializer.is_valid()):
+            weathers_data = serializer.data
+        else:
+            print(serializer.errors)
+        return render(request, "home.html", {"weathers": weathers_data})
     
     def post(self, request):
         weather_data = {
             "temperature": request.POST.get("temperature"),
             "date": request.POST.get("date"),
-            "atmosphericPressure": request.POST.get("atmosphericPressure"),
+            "atmospheric_pressure": request.POST.get("atmospheric_pressure"),
             "humidity": request.POST.get("humidity"),
             "city": request.POST.get("city"),
             "weather": request.POST.get("weather")
@@ -42,7 +45,7 @@ class WeatherView(View):
         weather_data = {
             "temperature": request.POST.get("temperature"),
             "date": request.POST.get("date"),
-            "atmosphericPressure": request.POST.get("atmosphericPressure"),
+            "atmospheric_pressure": request.POST.get("atmospheric_pressure"),
             "humidity": request.POST.get("humidity"),
             "city": request.POST.get("city"),
             "weather": request.POST.get("weather")
@@ -61,7 +64,6 @@ class WeatherView(View):
 class WeatherGenerate(View):
     
     repository = ''
-    serializer_class = WeatherSerializer
 
     
     def __init__(self, **kwargs: Any) -> None:
@@ -70,19 +72,28 @@ class WeatherGenerate(View):
     def get(self, request):
         CIDADES_BRASIL = ["São Paulo", "Rio de Janeiro", "Salvador", "Brasília", "Fortaleza", "Belo Horizonte", "Manaus", "Curitiba", "Recife", "Porto Alegre"];
         CONDICOES_TEMPO = ["Ensolarado", "Nublado", "Chuvoso", "Neve", "Tempestade", "Parcialmente nublado", "Neblina", "Ventania"];
-        now = datetime.now()
-        now_formated = now.strftime("%d/%m/%Y %H:%M:%S")
-        weather = {
-            "temperature":randrange(start=5, stop=30),
-            "date":f"{now_formated}",
-            "atmosphericPressure":f"{randrange(start=800, stop=1500)} hPa",
-            'humidity': f'{randrange(start=20, stop=90)}%',
-            'city':f'{CIDADES_BRASIL[randrange(start=0, stop=len(CIDADES_BRASIL))]}',
-            'weather':f'{CONDICOES_TEMPO[randrange(start=0, stop=len(CONDICOES_TEMPO))]}'
-            }
-        self.repository.insert(weather)
+        weather_data = {
+            "temperature": randrange(5, 30),
+            "date": datetime.now(),
+            "atmospheric_pressure": randrange(800, 1500),
+            "humidity": randrange(20, 90),
+            "city": CIDADES_BRASIL[randrange(len(CIDADES_BRASIL))],
+            "weather": CONDICOES_TEMPO[randrange(len(CONDICOES_TEMPO))]
+        }
         
+        # Create an instance of the WeatherSerializer with weather_data
+        serializer = WeatherSerializer(data=weather_data)
+        
+        if serializer.is_valid():
+            # Save the new WeatherEntity object to the database using the repository
+            self.repository.insert(serializer.validated_data)
+        else:
+            # If the data is invalid, print the errors to the console
+            print(serializer.errors)
+
+        # Redirect to the main weather view
         return redirect(MAIN_VIEW)
+
     
     
 class WeatherClear(View):
