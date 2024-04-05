@@ -19,14 +19,17 @@ class WeatherView(View):
         self.repository = WeatherRepository(collection_name='weathers')
 
     def get(self, request):
-        repository = WeatherRepository(collection_name='weathers')
-        weathers = list(repository.get_all())
-        serializer = WeatherSerializer(data=weathers, many=True)
-        if (serializer.is_valid()):
-            weathers_data = serializer.data
-            return render(request, "home.html", {"weathers": weathers_data})
-        else:
-            return render(request, "home.html")
+        try:
+            repository = WeatherRepository(collection_name='weathers')
+            weathers = list(repository.get_all())
+            serializer = WeatherSerializer(data=weathers, many=True)
+            if serializer.is_valid():
+                weathers_data = serializer.data
+                return render(request, "home.html", {"weathers": weathers_data})
+            else:
+                return render(request, "home.html", {"error": serializer.errors})
+        except Exception as e:
+            return render(request, "home.html", {"error": str(e)})
     
     def post(self, request):
         weather_data = {
