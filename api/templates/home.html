@@ -2,13 +2,11 @@
 <title>Página Inicial</title>
 <style>
   .weather-card {
-    margin: 20px;
-    padding: 15px;
-    width: 350px;
-    height: 200px;
-    border: 0.5px solid gray;
-    border-radius: 8px;
-    background-color: white;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    border-radius: 6px;
   }
 
   .weather-info {
@@ -20,7 +18,8 @@
     font-size: 20px;
     color: #007bff;
     margin-bottom: 10px;
-    font-weight: bold; /* Adicione esta linha para tornar os títulos em negrito */
+    font-weight: bold;
+    /* Adicione esta linha para tornar os títulos em negrito */
   }
 
   .home-page {
@@ -28,16 +27,62 @@
   }
 
   .row {
+    padding: 25px;
     display: flex;
     flex-wrap: wrap;
+    gap: 35px;
+  }
+
+  .title {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .edit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    padding: 0.5em;
+    border-radius: 6px;
+    transition: 300ms ease-in-out;
+  }
+
+  .edit-button:hover {
+    filter: brightness(0.9);
+  }
+
+  .edit-button:active {
+    transform: scale(0.9);
   }
 </style>
 
 <div class="row">
   {% for weather in weathers %}
+
   <div class="col-md-4">
     <div class="weather-card">
-      <h5 class="weather-title">Informações de Temperatura</h5>
+      <div class="title">
+        <h5 class="weather-title">Informações de Temperatura</h5>
+        <a href="{% url 'Weather Edit' id=weather.id %}" class="edit-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
+            viewBox="0 0 16 16">
+            <path
+              d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+            <path fill-rule="evenodd"
+              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+          </svg>
+        </a>
+        <a href="{% url 'Weather Remove' id=weather.id %}" class="edit-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill"
+            viewBox="0 0 16 16">
+            <path
+              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+          </svg>
+        </a>
+      </div>
       <div class="weather-info">
         <p><strong>Cidade:</strong> {{ weather.city }}</p>
         <p><strong>Temperatura:</strong> {{weather.temperature}}°C</p>
@@ -47,9 +92,11 @@
         <p><strong>Umidade: </strong> {{ weather.humidity }}</p>
         <p><strong>Condição do Tempo:</strong> {{ weather.weather }}</p>
         <p><strong>Data e Hora:</strong> {{ weather.date }}</p>
+
       </div>
     </div>
   </div>
+
   {% endfor %}
 </div>
 {% endblock content %}
