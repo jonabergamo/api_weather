@@ -1,5 +1,6 @@
 from django.conf import settings
 import pymongo
+import uuid
 
 class WeatherRepository:
     
@@ -26,13 +27,29 @@ class WeatherRepository:
         return document
     
     def insert(self, document):
-        self.get_collection().insert_one(document)
+        data = {
+            "id": str(uuid.uuid4()),
+            "temperature": document['temperature'],
+            "date": document['date'],
+            "atmospheric_pressure": document['atmospheric_pressure'],
+            "humidity": document['humidity'],
+            "city": document['city'],
+            "weather": document['weather']
+        }
+        self.get_collection().insert_one(data)
         
     def drop_all(self):
         self.get_collection().drop()
         
     def update(self, query, data):
-        self.get_collection().update_one(query, {"$set": data})
+        self.get_collection().update_one({"id": query}, {"$set": data})
 
     def delete(self, query):
-        self.get_collection().delete_one(query)
+        self.get_collection().delete_one({"id": query})
+    
+    def get_by_id(self, id):
+        document = self.get_collection().find_one({"id": id})
+        return document
+
+    def drop_by_id(self, id):
+        self.get_collection().delete_one({"id": id})

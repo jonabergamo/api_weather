@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import WeatherEntity
 
 class WeatherSerializer(serializers.Serializer):
+    id = serializers.UUIDField(required=False)
     temperature = serializers.FloatField()
     date = serializers.DateTimeField(format="%d/%m/%Y %H:%M:%S")
     city = serializers.CharField(max_length=255, allow_blank=True)
