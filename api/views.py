@@ -158,7 +158,11 @@ class WeatherEdit(View):
   def get(self, request, id):
       weather_data = self.repository.get_by_id(id)
       weather_form = WeatherForm(initial=weather_data)
-      return render(request, "edit_weather.html", {"form":weather_form, 'id':id})
+      weathers = list(self.repository.get_all())
+      serializer = WeatherSerializer(data=weathers, many=True)
+      if serializer.is_valid():
+        weathers_data = serializer.data
+        return render(request, "edit_weather.html", {"form":weather_form, 'id':id, "weathers": weathers_data})
   
   
   
