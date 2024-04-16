@@ -2,9 +2,12 @@
 <html lang="en">
 
 <head>
+  <title>Weather API</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
@@ -71,6 +74,25 @@
 
     .logo {
       width: 250px;
+    }
+
+    input {
+      border: 1px solid transparent;
+      width: 15em;
+      height: 2.5em;
+      padding-left: 0.8em;
+      outline: none;
+      overflow: hidden;
+      background-color: #F3F3F3;
+      border-radius: 6px;
+      transition: all 0.5s;
+    }
+
+    input:hover,
+    input:focus {
+      border: 2px solid #4A9DEC;
+      box-shadow: 0px 0px 0px 3px rgb(74, 157, 236, 20%);
+      background-color: white;
     }
   </style>
 </head>

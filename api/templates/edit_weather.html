@@ -1,95 +1,69 @@
-{% extends "main.html" %} {% block content %}
+{% extends "home.html" %} {% block edit %}
 <title>Página Inicial</title>
 <style>
   .home-page {
     color: #007bff;
   }
 
-  .row {
-    padding: 25px;
-    display: flex;
-    flex-wrap: wrap;
+  /* Estilo para o modal */
+  .modal-container2 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
   }
 
-  form {
-    padding: 2rem;
-    background-color: #fff;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    max-width: 500px;
-    border-radius: 6px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-
-  .card-text {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: left;
-    gap: 5px;
-
-  }
-
-  .card-body {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .submit-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 15px;
-  }
-
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-
-  input {
+  /* Estilo para o fundo escuro */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    background-color: #f5f5f5;
-    color: #242424;
-    padding: .15rem .5rem;
-    min-height: 30px;
-    border-radius: 4px;
-    outline: none;
-    border: none;
-    line-height: 1.15;
-    box-shadow: 0px 10px 20px -18px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
   }
 
-  input:focus {
-    border-bottom: 2px solid #5b5fc7;
-    border-radius: 4px 4px 2px 2px;
+  /* Estilo para o conteúdo do modal */
+  .modal-content {
+    position: relative;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    max-width: 500px;
+    margin: auto;
   }
 
-  input:hover {
-    outline: 1px solid lightgrey;
+  /* Estilo para o botão de fechar do modal */
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
   }
 </style>
 
-<div class="row">
-  <form action="{% url 'Weather Edit' id=id %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="card">
-      <div class="card-body">
-        {% for field in form %}
-        <p class="card-text">
-          {{ field.label }}: {{ field }}
-        </p>
-        {% endfor %}
+<div class="modal-backdrop"></div>
+<div class="modal-container2">
+  <div class="modal-content">
+    <a href="{% url 'Weather View' %}"><button class="btn btn-primary modal-close btn-sm"
+        style="z-index: 200;">&times;</button></a>
+    <!-- Aqui será incluído o seu formulário -->
+    <form action="{% url 'Weather Edit' id=id %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="card-body">
+          {% for field in form %}
+          <p class="card-text">
+            {{ field.label }}: {{ field }}
+          </p>
+          {% endfor %}
+          <button class="btn btn-primary" type="submit">Salvar</button>
+        </div>
       </div>
-      <div class="card-footer">
-        <input type="submit" value="Save" class="submit-button ">
-      </div>
-    </div>
-
-  </form>
+    </form>
+  </div>
 </div>
-{% endblock content %}
+{% endblock edit %}

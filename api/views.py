@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from .repositories import WeatherRepository
 from .serializers import WeatherSerializer
 from .forms import WeatherForm
+from .exceptions import WeatherException
 
 MAIN_VIEW = 'Weather View'
 
@@ -158,9 +159,11 @@ class WeatherEdit(View):
   def get(self, request, id):
       weather_data = self.repository.get_by_id(id)
       weather_form = WeatherForm(initial=weather_data)
-      return render(request, "edit_weather.html", {"form":weather_form, 'id':id})
-  
-  
+      weathers = list(self.repository.get_all())
+      serializer = WeatherSerializer(data=weathers, many=True)
+      if serializer.is_valid():
+        weathers_data = serializer.data
+        return render(request, "edit_weather.html", {"form":weather_form, 'id':id, "weathers": weathers_data})
   
 class WeatherRemove(View):
     
@@ -172,3 +175,26 @@ class WeatherRemove(View):
     def get(self, request, id):
         self.repository.drop_by_id(id)
         return redirect(MAIN_VIEW)
+    
+    
+    
+class WeatherFilter(View):
+    def post(self, request):
+        data = request.POST.dict()
+        data.pop('csrfmiddlewaretoken')
+
+        repository = WeatherRepository(collection_name='weathers')
+        try:
+            weathers = list(repository.get(data))
+            serializer = WeatherSerializer(data=weathers, many=True)
+            if (serializer.is_valid()):
+
+                model_weather = serializer.save()
+                object_return = {"weathers":model_weather}
+            else:
+
+                object_return = {"error":serializer.errors}
+        except WeatherException as e:
+            object_return = {"error":e.message}
+  
+        return render(request, "home.html", object_return)

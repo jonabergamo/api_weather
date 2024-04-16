@@ -122,11 +122,16 @@
   }
 </style>
 
+<form action="{% url 'Weather Filter' %}" method="post">
+  {% csrf_token %}
+  <input type="text" id="city" name="city">
+  <button type="submit" class="btn btn-primary">Pesquisar</button>
+</form>
 <div class="row">
+  {% block edit %} {% endblock %}
   {% for weather in weathers %}
-
-  <div class="col-md-4">
-    <div class="weather-card">
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
       {% if error %}
       <div class="error">
         <div class="error__icon">
@@ -145,8 +150,9 @@
       </div>
       {% endif %}
       <div class="title">
-        <h5 class="weather-title">Informações de Temperatura</h5>
-        <a href="{% url 'Weather Edit' id=weather.id %}" class="edit-button">
+        <h5 class="card-title">Informações de Temperatura</h5>
+        <a href="{% url 'Weather Edit' id=weather.id %}" class="btn btn-primary btn-sm"
+          style="display: flex; align-items:center;justify-content:center; aspect-ratio: 1;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
             viewBox="0 0 16 16">
             <path
@@ -155,7 +161,8 @@
               d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
           </svg>
         </a>
-        <a href="{% url 'Weather Remove' id=weather.id %}" class="edit-button">
+        <a href="{% url 'Weather Remove' id=weather.id %}" class="btn btn-primary btn-sm"
+          style="display: flex; align-items:center;justify-content:center; aspect-ratio: 1;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill"
             viewBox="0 0 16 16">
             <path
@@ -163,7 +170,7 @@
           </svg>
         </a>
       </div>
-      <div class="weather-info">
+      <div class="card-text" style="line-height: 15px; margin-top: 5px;">
         <p><strong>Cidade:</strong> {{ weather.city }}</p>
         <p><strong>Temperatura:</strong> {{weather.temperature}}°C</p>
         <p>
@@ -179,4 +186,7 @@
 
   {% endfor %}
 </div>
+
+
+
 {% endblock content %}
