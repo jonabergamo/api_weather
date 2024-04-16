@@ -9,5 +9,5 @@ urlpatterns = [
     path('insert', WeatherInsert.as_view(), name='Insert Weather'),
     path('clear', WeatherClear.as_view(), name='Clear Database'),
     path('edit/<str:id>', WeatherEdit.as_view(), name='Weather Edit'),
-    path('remove/<str:id>', WeatherRemove.as_view(), name='Weather Remove')
-]
+    path('remove/<str:id>', WeatherRemove.as_view(), name='Weather Remove'),
+    path('filter', WeatherFilter.as_view(), name='Weather Filter')]

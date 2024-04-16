@@ -19,5 +19,7 @@ class WeatherEntity:
     def __getattribute__(self, __name: str) -> Any:
         if (__name=='date'):
             return object.__getattribute__(self, __name).strftime("%d/%m/%Y %H:%M:%S")
+        if (__name=='city'):
+            return object.__getattribute__(self, 'city')
         else:
             return object.__getattribute__(self, __name)

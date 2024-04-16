@@ -53,3 +53,12 @@ class WeatherRepository:
 
     def drop_by_id(self, id):
         self.get_collection().delete_one({"id": id})
+        
+        
+    def get(self, filter):
+        documents = []
+        for document in self.get_collection().find(filter):
+            id = document.pop('_id')
+            document['id'] = str(id)
+            documents.append(document)
+        return documents
