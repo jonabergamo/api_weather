@@ -1,4 +1,7 @@
-{% extends "home.html" %} {% block edit %}
+
+{% extends "home.html" %}
+{% block edit %}
+
 <title>Página Inicial</title>
 <style>
   .home-page {
@@ -50,14 +53,17 @@
   <div class="modal-content">
     <a href="{% url 'Weather View' %}"><button class="btn btn-primary modal-close btn-sm"
         style="z-index: 200;">&times;</button></a>
+
     <!-- Aqui será incluído o seu formulário -->
     <form action="{% url 'Weather Edit' id=id %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group">
         <div class="card-body">
           {% for field in form %}
+
           <p class="card-text">
             {{ field.label }}: {{ field }}
+
           </p>
           {% endfor %}
           <button class="btn btn-primary" type="submit">Salvar</button>
@@ -66,4 +72,6 @@
     </form>
   </div>
 </div>
+
+
 {% endblock edit %}

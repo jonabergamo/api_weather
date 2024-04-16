@@ -164,6 +164,7 @@ class WeatherEdit(View):
       if serializer.is_valid():
         weathers_data = serializer.data
         return render(request, "edit_weather.html", {"form":weather_form, 'id':id, "weathers": weathers_data})
+
   
 class WeatherRemove(View):
     
