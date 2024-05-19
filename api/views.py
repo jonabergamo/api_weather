@@ -9,12 +9,20 @@ from .repositories import WeatherRepository
 from .serializers import WeatherSerializer
 from .forms import WeatherForm
 from .exceptions import WeatherException
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import render
+from .repositories import AuthRepository
+from .forms import RegisterForm, LoginForm
+from rest_framework import status
+from django.contrib import messages
+from pymongo.errors import DuplicateKeyError
 
 MAIN_VIEW = 'Weather View'
 
 class WeatherView(View):
-    
-
         
     def __init__(self, **kwargs: Any) -> None:
         self.repository = WeatherRepository(collection_name='weathers')
@@ -209,3 +217,58 @@ class WeatherFilter(View):
             object_return = {"error":e.message}
   
         return render(request, "home.html", object_return)
+    
+    
+
+class RegisterView(View):
+    def get(self, request):
+        form = RegisterForm()
+        return render(request, "register.html", {"form": form})
+
+    def post(self, request):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+            auth_repo = AuthRepository()
+            try:
+                auth_repo.create_user(username, email, password)
+                messages.success(request, "Registration successful!")
+                return redirect("login")
+            except DuplicateKeyError:
+                messages.error(request, "Email is already in use. Please use a different email address.")
+        else:
+            messages.error(request, "Registration failed. Please correct the errors below.")
+        return render(request, "register.html", {"form": form})
+
+class LoginView(View):
+    def get(self, request):
+        form = LoginForm()
+        return render(request, "login.html", {"form": form})
+
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            auth_repo = AuthRepository()
+            user = auth_repo.verify_credentials(email, password)
+            if user:
+                # Lógica para autenticar o usuário e iniciar uma sessão
+                messages.success(request, "Login successful!")
+                return redirect(MAIN_VIEW)  # Redirecionar para a página inicial após login bem-sucedido
+            else:
+                messages.error(request, "Invalid email or password.")
+        else:
+            messages.error(request, "Please correct the errors below.")
+        return render(request, "login.html", {"form": form})
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"detail": "You are authenticated"})
+
+def login_view(request):
+    return render(request, 'authapp/login.html')

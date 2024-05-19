@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 from api.views import *
+from django.contrib.auth.views import LoginView
+from api.views import RegisterView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -10,4 +12,7 @@ urlpatterns = [
     path('clear', WeatherClear.as_view(), name='Clear Database'),
     path('edit/<str:id>', WeatherEdit.as_view(), name='Weather Edit'),
     path('remove/<str:id>', WeatherRemove.as_view(), name='Weather Remove'),
-    path('filter', WeatherFilter.as_view(), name='Weather Filter')]
+    path('filter', WeatherFilter.as_view(), name='Weather Filter'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+]
