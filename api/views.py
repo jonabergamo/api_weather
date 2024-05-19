@@ -115,10 +115,20 @@ class WeatherClear(View):
 
 
 class WeatherInsert(View):
+    
+  
+    repository = ''
+    
+    def __init__(self,) -> None:
+        self.repository = WeatherRepository(collection_name='weathers')
+        
     def get(self, request):
         weather_form = WeatherForm()
-
-        return render(request, "add_weather.html", {"form":weather_form})
+        weathers = list(self.repository.get_all())
+        serializer = WeatherSerializer(data=weathers, many=True)
+        if serializer.is_valid():
+            weathers_data = serializer.data
+        return render(request, "add_weather.html", {"form":weather_form, "weathers": weathers_data})
     
     def post(self, request):
         weather_form = WeatherForm(request.POST)

@@ -1,78 +1,76 @@
-{% extends "main.html" %} {% block content %}
+{% extends "home.html" %}
+{% block edit %}
 <title>Página Inicial</title>
 <style>
   .home-page {
     color: #007bff;
   }
 
-  .row {
-    display: flex;
-    flex-wrap: wrap;
+  /* Estilo para o modal */
+  .modal-container2 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
   }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 20px;
+  /* Estilo para o fundo escuro */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+  }
+
+  /* Estilo para o conteúdo do modal */
+  .modal-content {
+    position: relative;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     padding: 20px;
-    border: 1px solid #DDD;
-    border-radius: 5px;
+    max-width: 500px;
+    margin: auto;
   }
 
-  .submit-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+  /* Estilo para o botão de fechar do modal */
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     cursor: pointer;
-  }
-
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-
-  input {
-    max-width: 190px;
-    background-color: #f5f5f5;
-    color: #242424;
-    padding: .15rem .5rem;
-    min-height: 30px;
-    border-radius: 4px;
-    outline: none;
-    border: none;
-    line-height: 1.15;
-    box-shadow: 0px 10px 20px -18px;
-  }
-
-  input:focus {
-    border-bottom: 2px solid #5b5fc7;
-    border-radius: 4px 4px 2px 2px;
-  }
-
-  input:hover {
-    outline: 1px solid lightgrey;
   }
 </style>
 
-<div class="row">
-  <form action="{% url 'Insert Weather' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
 
-    <div class="card">
-      <div class="card-body">
-        {% for field in form %}
-        <p class="card-text">
-          {{ field.label }}: {{ field }}
-        </p>
-        {% endfor %}
-      </div>
-      <div class="card-footer">
-        <input type="submit" value="Save" class="submit-button ">
-      </div>
-    </div>
+<div class="modal-backdrop"></div>
+<div class="modal-container2">
+  <div class="modal-content">
+    <a href="{% url 'Weather View' %}"><button class="btn btn-primary modal-close btn-sm"
+        style="z-index: 200;">&times;</button></a>
 
-  </form>
+    <!-- Aqui será incluído o seu formulário -->
+    <form action="{% url 'Insert Weather' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="">
+        <div class="card-body">
+          {% for field in form %}
+          <p class="card-text">
+            {{ field.label }}: {{ field }}
+          </p>
+          {% endfor %}
+        </div>
+        <div class="card-footer">
+          <input type="submit" value="Inserir" class="submit-button ">
+        </div>
+      </div>
+
+    </form>
+  </div>
 </div>
-{% endblock content %}
+{% endblock edit %}
